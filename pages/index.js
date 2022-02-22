@@ -8,8 +8,6 @@ export default function Home(props) {
     variantId === '1' ? styles.bVariant : styles.aVariant
   } ${styles.main}`;
   const isAVariant = variantId === '0' || !variantId;
-
-  console.log('isAVariant', { isAVariant, variantId });
   return (
     <div className={styles.container}>
       <Head>
