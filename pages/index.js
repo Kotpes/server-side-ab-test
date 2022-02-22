@@ -30,11 +30,6 @@ export default function Home(props) {
           `,
         }}
       />
-
-      <Head>
-        <title>AB test page. Variant {isAVariant ? 'A' : 'B'}</title>
-      </Head>
-
       <Script
         strategy="lazyOnload"
         dangerouslySetInnerHTML={{
@@ -48,6 +43,10 @@ export default function Home(props) {
           `,
         }}
       />
+
+      <Head>
+        <title>AB test page. Variant {isAVariant ? 'A' : 'B'}</title>
+      </Head>
 
       <main className={mainClasses}>
         {isAVariant ? (
