@@ -40,8 +40,8 @@ export default function Home(props) {
         dangerouslySetInnerHTML={{
           __html: `
             gtag('event', 'experiment_impression', {
-              'experiment_id': ${experimentId},
-              'variant_id': ${variantId},
+              'experiment_id': '${experimentId}',
+              'variant_id': '${variantId}',
               'send_to': '${gaMeasurementID}'
             });
             gtag('set', {'experiments': [{'id': ${experimentId}, 'variant': ${variantId}}]});
