@@ -12,11 +12,9 @@ export default function Home(props) {
   return (
     <div className={styles.container}>
       <Script
-        strategy="lazyOnload"
         src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS}`}
       />
       <Script
-        strategy="lazyOnload"
         dangerouslySetInnerHTML={{
           __html: `
             window.dataLayer = window.dataLayer || [];
@@ -30,9 +28,15 @@ export default function Home(props) {
       />
 
       <Script
+        strategy="lazyOnload"
         dangerouslySetInnerHTML={{
           __html: `
             gtag('set', {'experiments': [{'id': ${experimentId}, 'variant': ${variantId}}]});
+            gtag('event', 'experiment_impression', {​
+              'experiment_id': ${experimentId},
+              'variant_id': ${variantId},
+              'send_to': '${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS}',
+            });
           `,
         }}
       />
