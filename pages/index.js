@@ -44,7 +44,7 @@ export default function Home(props) {
               'variant_id': '${variantId}',
               'send_to': '${gaMeasurementID}'
             });
-            gtag('set', {'experiments': [{'id': ${experimentId}, 'variant': ${variantId}}]});
+            gtag('set', {'experiments': [{'id': '${experimentId}', 'variant': '${variantId}'}]});
           `,
         }}
       />
