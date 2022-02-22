@@ -9,7 +9,7 @@ export default function Home(props) {
   } ${styles.main}`;
   const isAVariant = variantId === '0' || !variantId;
   const gaMeasurementID = process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS ?? '';
-  console.log('test', { experimentId, variantId });
+
   return (
     <div className={styles.container}>
       <Script
