@@ -1,18 +1,24 @@
 import Head from 'next/head';
+import Script from 'next/script';
 import styles from '../styles/Home.module.css';
 
 export default function Home(props) {
-  const mainClasses = `${styles.aVariant} ${styles.main}`;
-  console.log('props', props);
+  const { experimentId, variantId } = props;
+  const mainClasses = `${
+    variantId === '1' ? styles.bVariant : styles.aVariant
+  } ${styles.main}`;
+  const isAVariant = variantId === '0' || !variantId;
+
+  console.log('isAVariant', { isAVariant, variantId });
   return (
     <div className={styles.container}>
       <Head>
         {/* Global Site Tag (gtag.js) - Google Analytics */}
-        <script
-          async
+        <Script
+          strategy="afterInteractive"
           src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS}`}
         />
-        <script
+        <Script
           dangerouslySetInnerHTML={{
             __html: `
             window.dataLayer = window.dataLayer || [];
@@ -24,29 +30,40 @@ export default function Home(props) {
           `,
           }}
         />
+
+        <Script
+          dangerouslySetInnerHTML={{
+            __html: `
+            gtag('set', {'experiments': [{'id': ${experimentId}, 'variant': ${variantId}}]});
+          `,
+          }}
+        />
       </Head>
       <Head>
-        <title>AB test page</title>
+        <title>AB test page. Variant {isAVariant ? 'A' : 'B'}</title>
       </Head>
 
       <main className={mainClasses}>
-        <h1 className={styles.title}>
-          This is <span style={{ fontSize: '90px' }}>A</span> variant
-        </h1>
-        <h1 className={styles.title}>
-          This is <span style={{ fontSize: '90px' }}>B</span> variant
-        </h1>
+        {isAVariant ? (
+          <h1 className={styles.title}>
+            This is <span style={{ fontSize: '90px' }}>A</span> variant
+          </h1>
+        ) : (
+          <h1 className={styles.title}>
+            This is <span style={{ fontSize: '90px' }}>B</span> variant
+          </h1>
+        )}
       </main>
     </div>
   );
 }
 
 export async function getServerSideProps(context) {
-  const { experiment, variant } = context.query;
+  const { experimentId, variantId } = context.query;
   return {
     props: {
-      experiment,
-      variant,
+      experimentId: experimentId ?? null,
+      variantId: variantId ?? null,
     },
   };
 }
