@@ -10,12 +10,11 @@ export default function Home(props) {
     variantId === '1' ? styles.bVariant : styles.aVariant
   } ${styles.main}`;
   const isAVariant = variantId === '0' || !variantId;
-  console.log('clientCokkies', getCookies());
 
   return (
     <div className={styles.container}>
       <Script
-        strategy="lazyOnload"
+        strategy='lazyOnload'
         dangerouslySetInnerHTML={{
           __html: `
             gtag('event', 'experiment_impression', {
@@ -48,19 +47,18 @@ export default function Home(props) {
 }
 
 export async function getServerSideProps({ req, res }) {
-  // const { experimentId, variantId } = context.query;
-  const experimentId = 'testExperiment';
-  const variant = getCookie(experimentId, { req, res });
+  const experimentId = 'testExperiment'; //from Google Optimize
+  const variantId = req.cookies[experimentId];
 
-  if (!variant) {
+  if (!variantId) {
     const group = Math.random() < 0.5 ? '1' : '0';
-    setCookies(experimentId, group);
+    res.setHeader('set-cookie', `${experimentId}=${group}`);
   }
 
   return {
     props: {
       experimentId,
-      variantId: variant ?? '',
+      variantId,
     },
   };
 }
