@@ -1,14 +1,16 @@
 import Head from 'next/head';
 import Script from 'next/script';
+import { setCookies, getCookies, getCookie, checkCookies } from 'cookies-next';
 import styles from '../styles/Home.module.css';
 
 export default function Home(props) {
   const { experimentId = '', variantId = '' } = props;
+  const gaMeasurementID = process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS ?? '';
   const mainClasses = `${
     variantId === '1' ? styles.bVariant : styles.aVariant
   } ${styles.main}`;
   const isAVariant = variantId === '0' || !variantId;
-  const gaMeasurementID = process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS ?? '';
+  console.log('clientCokkies', getCookies());
 
   return (
     <div className={styles.container}>
@@ -45,12 +47,20 @@ export default function Home(props) {
   );
 }
 
-export async function getServerSideProps(context) {
-  const { experimentId, variantId } = context.query;
+export async function getServerSideProps({ req, res }) {
+  // const { experimentId, variantId } = context.query;
+  const experimentId = 'testExperiment';
+  const variant = getCookie(experimentId, { req, res });
+
+  if (!variant) {
+    const group = Math.random() < 0.5 ? '1' : '0';
+    setCookies(experimentId, group);
+  }
+
   return {
     props: {
-      experimentId: experimentId ?? null,
-      variantId: variantId ?? null,
+      experimentId,
+      variantId: variant ?? '',
     },
   };
 }

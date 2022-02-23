@@ -8,6 +8,8 @@
     "start": "next start"
   },
   "dependencies": {
+    "cookies": "^0.8.0",
+    "cookies-next": "^2.0.4",
     "next": "^12.1.0",
     "react": "17.0.1",
     "react-dom": "17.0.1"
